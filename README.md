@@ -20,5 +20,5 @@ sscc
 
 ## Screenshots
 
-![SSCC]()
-![SSCC2]()
+![SSCC](https://raw.githubusercontent.com/jnabasny/Shell-Script-Card-Catalog/master/screenshots/main.png)
+![SSCC2](https://raw.githubusercontent.com/jnabasny/Shell-Script-Card-Catalog/master/screenshots/scripts.png)

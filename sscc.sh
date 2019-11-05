@@ -4,9 +4,18 @@ setup() {
 clear
 if [ -f ~/.sscc ]; then
 
-editor=nano
-dir=/home/zad/scripts
+editor_cfg=$(cat ~/.sscc | grep editor)
+ed=${editor_cfg:7}
+dir_cfg=$(cat ~/.sscc | grep dir)
+dir=${dir_cfg:4}
+menu_cfg=$(cat ~/.sscc | grep show_main_menu)
+show_main_menu=${menu_cfg:15}
+
+if [ "$show_main_menu" = "yes" ]; then
 menu
+else
+main
+fi
 
 else
 echo '
@@ -53,8 +62,8 @@ fi
 }
 
 main() {
-clear
 cd $dir
+clear
 mapfile -t scripts < <(ls -t *.sh)
 length=${#scripts[@]}
 i=0
@@ -73,10 +82,11 @@ if [ "$num" = "$i" ]; then
 menu
 elif [ "$num" -lt "$i" ]; then
 file=${scripts["$num"]}
-$editor $file
+$ed $file
 main
 else
-$editor $num
+echo "#!/bin/bash" > $num
+$ed $num
 main
 fi
 
@@ -156,7 +166,7 @@ menu
 fi
 ;;
 3)
-$editor ~/.sscc
+$ed ~/.sscc
 menu
 ;;
 4)

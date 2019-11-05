@@ -1,14 +1,55 @@
 #!/bin/bash
 # Title: Shell Script Card Catalog
 setup() {
-#if [ -f "~/.sscc" ]; then
-#read contents
-#else
-#setup
-#fi
+clear
+if [ -f ~/.sscc ]; then
 
 editor=nano
 dir=/home/zad/scripts
+menu
+
+else
+echo '
+Welcome to the Shell Script Card Catalog!
+
+Please take a second to setup your scripting preferences. These can be changed at any time after the setup is finished.
+
+'
+read -p "What text editor would you like to use? ["$EDITOR"] " ed
+read -p "Where do you keep your scripts? ["$(pwd)"] " dir
+
+if [ -z "$ed" ]; then
+ed=$EDITOR
+fi
+
+if [ -z "$dir" ]; then
+dir=$(pwd)
+fi
+
+echo "[Shell Script Card Catalog Configuration]
+editor=$ed
+dir=$dir
+show_main_menu=yes" > ~/.sscc
+
+
+if [ ! -f ~/bin/sscc ]; then
+        if [ ! -d ~/bin/ ]; then
+        mkdir ~/bin/
+        fi
+SOURCE="${BASH_SOURCE[0]}"
+cp $SOURCE ~/bin/sscc
+chmod +x ~/bin/sscc
+clear
+echo '
+SETUP COMPLETE!
+
+YOU MAY NOW RUN SSCC FROM ANYWHERE BY SIMPLY TYPING "sscc" IN A TERMINAL
+
+PRESS ENTER TO CONTINUE'
+read
+menu
+fi
+fi
 }
 
 main() {
@@ -87,6 +128,7 @@ case $cmd in
 main
 ;;
 2)
+clear
 cd $dir
 mapfile -t scripts < <(ls -t *.sh)
 length=${#scripts[@]}
@@ -97,10 +139,21 @@ echo "[$i] $name"
 ((i++))
 done
 
+echo -e "[$i] Back to Main Menu\n"
+
 read -p ">> " num
+
+
+
+if [ "$num" = "$i" ]; then
+menu
+elif [ "$num" -lt "$i" ]; then
 file=${scripts["$num"]}
 xterm -hold ./$file
 menu
+else
+menu
+fi
 ;;
 3)
 $editor ~/.sscc
@@ -113,8 +166,7 @@ exit 0
 menu
 ;;
 esac
-
 }
+
 setup
-menu
 exit 0

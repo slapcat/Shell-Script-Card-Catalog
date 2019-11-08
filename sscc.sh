@@ -86,6 +86,7 @@ $ed $file
 main
 else
 echo "#!/bin/bash" > $num
+chmod +x $num
 $ed $num
 main
 fi
